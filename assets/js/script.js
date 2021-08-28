@@ -44,8 +44,6 @@ function generatePassword() {
     }
   }
 
-  console.log(charcounts);
-
   function totalcount(obj) {
     let total = 0;
     for (k of Object.keys(obj)) {
@@ -66,8 +64,6 @@ function generatePassword() {
     }
     charcounts[randomChoice(choices)]++;
   }
-  console.log(charcounts);
-  console.log(totalcount(charcounts));
 
   // generate the password
   let pw='';
@@ -81,7 +77,6 @@ function generatePassword() {
     }
   }
 
-  console.log(pw);
   return pw;
 }
 
