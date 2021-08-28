@@ -8,7 +8,7 @@ const charsets = {
   lowercase: 'abcdefghijklmnopqrstuvwxyz',
   uppercase: 'ABCDEFGHIJKLMNOPQRSTUVWXYZ',
   numbers: '0123456789',
-  special: ' !"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
+  special: '!"#$%&\'()*+,-./:;<=>?@[\\]^_`{|}~'
 };
 
 function randomChoice(arr) {
@@ -46,17 +46,16 @@ function generatePassword() {
 
   console.log(charcounts);
 
-  let ks = Object.keys(charcounts);
-  function totalcount(charcounts) {
-    
+  function totalcount(obj) {
     let total = 0;
-    for (let i = 0; i < ks.length; i++) {
-      total += charcounts[ks[i]];
+    for (k of Object.keys(obj)) {
+      total += obj[k];
     }
     return total;
   }
 
   // determine how many characters of each charset will be in the password
+  let ks = Object.keys(charcounts);
   while (totalcount(charcounts) < len) {
     charcounts[randomChoice(ks)]++;
   }
@@ -65,17 +64,13 @@ function generatePassword() {
 
   // generate the password
   let pw='';
-  let tks = ks;
-  while (tks.length > 0) {
-    let cset = randomChoice(tks);
+  while (Object.keys(charcounts).length > 0) {
+    let cset = randomChoice(Object.keys(charcounts));
     pw += randomChoice(charsets[cset]);
 
     charcounts[cset]--;
-    tks = [];
-    for (let i = 0; i < ks.length; i++) {
-      if (charcounts[ks[i]] > 0) {
-        tks.push(ks[i]);
-      }
+    if (charcounts[cset] === 0) {
+      delete charcounts[cset];
     }
   }
 
