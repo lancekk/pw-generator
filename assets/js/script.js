@@ -58,11 +58,9 @@ function generatePassword() {
     // weight each character set by its size
     let choices = [];
     for (let i = 0; i < ks.length; i++) {
-      for (let j = 0; j < charsets[ks[i]].length; j++) {
-        choices.push(ks[i]);
-      }
+      choices.push(Array(charsets[ks[i]].length).fill(ks[i]));
     }
-    charcounts[randomChoice(choices)]++;
+    charcounts[randomChoice(choices.flat())]++;
   }
 
   // generate the password
