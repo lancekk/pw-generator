@@ -57,15 +57,22 @@ function generatePassword() {
   // determine how many characters of each charset will be in the password
   let ks = Object.keys(charcounts);
   while (totalcount(charcounts) < len) {
-    charcounts[randomChoice(ks)]++;
+    // weight each character set by its size
+    let choices = [];
+    for (let i = 0; i < ks.length; i++) {
+      for (let j = 0; j < charsets[ks[i]].length; j++) {
+        choices.push(ks[i]);
+      }
+    }
+    charcounts[randomChoice(choices)]++;
   }
   console.log(charcounts);
   console.log(totalcount(charcounts));
 
   // generate the password
   let pw='';
-  while (Object.keys(charcounts).length > 0) {
-    let cset = randomChoice(Object.keys(charcounts));
+  while (ks = Object.keys(charcounts), ks.length > 0) {
+    let cset = randomChoice(ks);
     pw += randomChoice(charsets[cset]);
 
     charcounts[cset]--;
