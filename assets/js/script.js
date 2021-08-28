@@ -24,51 +24,48 @@ function generatePassword() {
     len = prompt(promptText);
   }
 
-  //prompt flags
-  let flags = {
-    useLower: false,
-    useUpper: false,
-    useNumbers: false,
-    useSpecial: false
-  };
-
   // validate
-  while (!(flags.useLower || flags.useUpper || flags.useNumbers || flags.useSpecial)) {
-    alert("Please select at least one set of characters");
-    flags.useLower = confirm("Use lowercase letters?");
-    flags.useUpper = confirm("Use uppercase letters?");
-    flags.useNumbers = confirm("Use numbers?");
-    flags.useSpecial = confirm("Use special characters?");
+  let charcounts = {};
+  while (Object.keys(charcounts).length === 0) {
+    if (confirm("Use lowercase letters?")) {
+      charcounts.lowercase = 1;
+    }
+    if (confirm("Use uppercase letters?")) {
+      charcounts.uppercase = 1;
+    }
+    if (confirm("Use numbers?")) {
+      charcounts.numbers = 1;
+    }
+    if (confirm("Use special characters?")) {
+      charcounts.special = 1;
+    }
+    if (Object.keys(charcounts).length === 0) {
+      alert("Please select at least one set of characters");
+    }
   }
 
-  // generate
-  let charcounts = {
-    lowercase: flags.useLower?1:0,
-    uppercase: flags.useUpper?1:0,
-    numbers: flags.useNumbers?1:0,
-    special: flags.useSpecial?1:0,
-  };
+  console.log(charcounts);
 
+  let ks = Object.keys(charcounts);
   function totalcount(charcounts) {
-    return charcounts.lowercase + charcounts.uppercase + charcounts.numbers + charcounts.special;
+    
+    let total = 0;
+    for (let i = 0; i < ks.length; i++) {
+      total += charcounts[ks[i]];
+    }
+    return total;
   }
 
   // determine how many characters of each charset will be in the password
-  let ks = Object.keys(charcounts);
-  let tks = [];
-  for (let i = 0; i < ks.length; i++) {
-    if (charcounts[ks[i]] > 0) {
-      tks.push(ks[i]);
-    }
-  }
   while (totalcount(charcounts) < len) {
-    charcounts[randomChoice(tks)]++;
+    charcounts[randomChoice(ks)]++;
   }
   console.log(charcounts);
   console.log(totalcount(charcounts));
 
   // generate the password
   let pw='';
+  let tks = ks;
   while (tks.length > 0) {
     let cset = randomChoice(tks);
     pw += randomChoice(charsets[cset]);
